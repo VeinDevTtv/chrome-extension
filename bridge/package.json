@@ -1,0 +1,14 @@
+{
+  "name": "discord-rich-presence-bridge",
+  "version": "1.0.0",
+  "description": "Bridge between Chrome extension and Discord Rich Presence",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord-rpc": "^4.0.1"
+  }
+} 
