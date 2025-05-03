@@ -3,47 +3,103 @@
 <head>
   <title>Discord Rich Presence for Web</title>
   <style>
+    :root {
+      --background-color: #ffffff;
+      --text-color: #333333;
+      --header-color: #5865F2;
+      --toggle-bg: #f9f9f9;
+      --toggle-off: #ccc;
+      --toggle-on: #5865F2;
+      --status-bg: #f0f0f0;
+      --footer-color: #888;
+      --divider-color: #e0e0e0;
+      --input-bg: #f5f5f5;
+      --button-bg: #5865F2;
+      --button-text: white;
+      --button-hover: #4752c4;
+      --error-color: #c62828;
+      --warning-color: #ff8f00;
+      --success-color: #2e7d32;
+    }
+    
+    .dark-mode {
+      --background-color: #2C2F33;
+      --text-color: #ffffff;
+      --header-color: #7289DA;
+      --toggle-bg: #36393F;
+      --toggle-off: #4f545c;
+      --toggle-on: #7289DA;
+      --status-bg: #36393F;
+      --footer-color: #72767d;
+      --divider-color: #4f545c;
+      --input-bg: #40444B;
+      --button-bg: #7289DA;
+      --button-text: white;
+      --button-hover: #677BC4;
+      --error-color: #f44336;
+      --warning-color: #FFA726;
+      --success-color: #66BB6A;
+    }
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      width: 300px;
+      width: 350px;
       padding: 15px;
-      color: #333;
+      color: var(--text-color);
+      background-color: var(--background-color);
+      margin: 0;
+      transition: all 0.3s ease;
     }
+    
     .header {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--divider-color);
     }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+    
     .header img {
       width: 32px;
       height: 32px;
       margin-right: 10px;
     }
+    
     h1 {
       font-size: 18px;
       margin: 0;
-      color: #5865F2;
+      color: var(--header-color);
     }
+    
     .toggle-container {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
-      padding: 8px;
-      background-color: #f9f9f9;
+      padding: 10px;
+      background-color: var(--toggle-bg);
       border-radius: 5px;
     }
+    
     .toggle {
       position: relative;
       display: inline-block;
       width: 50px;
       height: 24px;
     }
+    
     .toggle input {
       opacity: 0;
       width: 0;
       height: 0;
     }
+    
     .slider {
       position: absolute;
       cursor: pointer;
@@ -51,10 +107,11 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #ccc;
+      background-color: var(--toggle-off);
       transition: .4s;
       border-radius: 24px;
     }
+    
     .slider:before {
       position: absolute;
       content: "";
@@ -66,55 +123,269 @@
       transition: .4s;
       border-radius: 50%;
     }
+    
     input:checked + .slider {
-      background-color: #5865F2;
+      background-color: var(--toggle-on);
     }
+    
     input:checked + .slider:before {
       transform: translateX(26px);
     }
+    
     .status {
       margin-top: 15px;
-      padding: 10px;
+      padding: 12px;
       border-radius: 5px;
-      background-color: #f0f0f0;
+      background-color: var(--status-bg);
       text-align: center;
     }
+    
     .footer {
       margin-top: 15px;
       font-size: 12px;
       text-align: center;
-      color: #888;
+      color: var(--footer-color);
+    }
+    
+    .tabs {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--divider-color);
+    }
+    
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .tab.active {
+      border-bottom: 2px solid var(--header-color);
+      color: var(--header-color);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-group input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid var(--divider-color);
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      box-sizing: border-box;
+    }
+    
+    .button {
+      padding: 8px 12px;
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .button:hover {
+      background-color: var(--button-hover);
+    }
+    
+    .blacklist-container {
+      margin-top: 15px;
+      max-height: 150px;
+      overflow-y: auto;
+      border: 1px solid var(--divider-color);
+      border-radius: 4px;
+      padding: 5px;
+      background-color: var(--input-bg);
+    }
+    
+    .blacklist-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px;
+      border-bottom: 1px solid var(--divider-color);
+    }
+    
+    .blacklist-item:last-child {
+      border-bottom: none;
+    }
+    
+    .blacklist-item button {
+      background-color: var(--error-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 3px 6px;
+      cursor: pointer;
+    }
+    
+    .template-help {
+      font-size: 12px;
+      color: var(--footer-color);
+      margin-top: 5px;
+    }
+    
+    .error {
+      color: var(--error-color);
+    }
+    
+    .warning {
+      color: var(--warning-color);
+    }
+    
+    .success {
+      color: var(--success-color);
+    }
+    
+    .domain-stats {
+      margin-top: 15px;
+      max-height: 150px;
+      overflow-y: auto;
+      border-radius: 4px;
+    }
+    
+    .domain-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px;
+      border-bottom: 1px solid var(--divider-color);
+      background-color: var(--toggle-bg);
+      margin-bottom: 5px;
+      border-radius: 4px;
+    }
+    
+    .small-text {
+      font-size: 12px;
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <img src="images/icon48.png" alt="Logo">
-    <h1>Discord Rich Presence</h1>
-  </div>
-
-  <div class="toggle-container">
-    <span>Enable Rich Presence</span>
-    <label class="toggle">
-      <input type="checkbox" id="enableToggle">
+    <div class="header-left">
+      <img src="images/icon48.png" alt="Logo">
+      <h1>Discord Rich Presence</h1>
+    </div>
+    <label class="toggle" title="Toggle Dark Mode">
+      <input type="checkbox" id="darkModeToggle">
       <span class="slider"></span>
     </label>
   </div>
 
-  <div class="toggle-container">
-    <span>Show Page Title</span>
-    <label class="toggle">
-      <input type="checkbox" id="showTitleToggle">
-      <span class="slider"></span>
-    </label>
+  <div class="tabs">
+    <div class="tab active" data-tab="general">General</div>
+    <div class="tab" data-tab="blacklist">Privacy</div>
+    <div class="tab" data-tab="advanced">Advanced</div>
+    <div class="tab" data-tab="stats">Stats</div>
   </div>
 
-  <div class="status" id="statusText">
-    Checking connection status...
+  <div id="general" class="tab-content active">
+    <div class="toggle-container">
+      <span>Enable Rich Presence</span>
+      <label class="toggle">
+        <input type="checkbox" id="enableToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-container">
+      <span>Show Page Title</span>
+      <label class="toggle">
+        <input type="checkbox" id="showTitleToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="status" id="statusText">
+      Checking connection status...
+    </div>
+
+    <div class="footer">
+      Remember to run the bridge app to connect to Discord!
+    </div>
   </div>
 
-  <div class="footer">
-    Remember to run the bridge app to connect to Discord!
+  <div id="blacklist" class="tab-content">
+    <div class="form-group">
+      <label for="blacklistInput">Blacklist Domain:</label>
+      <div style="display: flex;">
+        <input type="text" id="blacklistInput" placeholder="e.g., example.com">
+        <button id="addBlacklistButton" class="button" style="margin-left: 5px;">Add</button>
+      </div>
+    </div>
+
+    <p class="small-text">Domains in this list will not be shown in Discord.</p>
+
+    <div class="blacklist-container" id="blacklistContainer">
+      <!-- Blacklisted domains will be shown here -->
+    </div>
+  </div>
+
+  <div id="advanced" class="tab-content">
+    <div class="toggle-container">
+      <span>Use Custom Template</span>
+      <label class="toggle">
+        <input type="checkbox" id="useCustomTemplateToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="customTemplateInput">Custom Template:</label>
+      <input type="text" id="customTemplateInput" placeholder="{activity} {name} | {title}">
+      <div class="template-help">
+        Available variables: {activity}, {name}, {domain}, {title}
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>Cross-Browser Compatibility:</label>
+      <div class="small-text">
+        This extension also works with other Chromium browsers like Brave, Edge, Opera, etc.
+        Just install it the same way you would in Chrome.
+      </div>
+    </div>
+  </div>
+
+  <div id="stats" class="tab-content">
+    <div class="form-group">
+      <label>Session Information:</label>
+      <div class="toggle-container">
+        <span>Current Session</span>
+        <span id="sessionTime">00:00:00</span>
+      </div>
+      <div class="toggle-container">
+        <span>Current Website</span>
+        <span id="domainTime">00:00:00</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Top Sites:</label>
+      <div class="domain-stats" id="domainStats">
+        <!-- Domain statistics will be shown here -->
+      </div>
+    </div>
   </div>
 
   <script src="popup.js"></script>
