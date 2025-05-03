@@ -1,0 +1,1 @@
+Place your extension ID here. You can find it by going to brave://extensions, enabling Developer mode, and looking at the ID shown under the extension name. 
