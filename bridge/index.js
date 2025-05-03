@@ -4,7 +4,7 @@ const path = require('path');
 
 // Discord Application Client ID - you need to create a Discord application at
 // https://discord.com/developers/applications and use its client ID here
-const CLIENT_ID = '123456789012345678'; // REPLACE WITH YOUR ACTUAL CLIENT ID
+const CLIENT_ID = '1143581135763419236'; // REPLACE WITH YOUR ACTUAL CLIENT ID
 
 // Initialize RPC
 const rpc = new DiscordRPC.Client({ transport: 'ipc' });
@@ -237,9 +237,9 @@ function registerNativeMessaging() {
     path: process.execPath,
     type: 'stdio',
     allowed_origins: [
-      'chrome-extension://<EXTENSION_ID>/',
-      'edge-extension://<EXTENSION_ID>/',
-      'brave-extension://<EXTENSION_ID>/'
+      'chrome-extension://<ifbfbleiejicacldpbnhffdkkbbeoldl>/',
+      'edge-extension://<ifbfbleiejicacldpbnhffdkkbbeoldl>/',
+      'brave-extension://<ifbfbleiejicacldpbnhffdkkbbeoldl>/'
     ]
   };
   
